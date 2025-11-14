@@ -9,14 +9,15 @@
   --texto-claro:#e8edf5;
 }
 
-
 body{ background:var(--fondo); color:var(--texto); }
+
 
 .barra-navegacion{
   display:flex; align-items:center; justify-content:space-between;
   padding:18px 60px; background: rgba(255,255,255,0.7); backdrop-filter: blur(10px);
   position:sticky; top:0; z-index:1000;
 }
+
 .logo{ font-weight:700; font-size:24px; color:var(--primario); }
 .enlaces-nav{ display:flex; gap:28px; align-items:center; }
 .enlaces-nav a{ text-decoration:none; color:var(--primario); font-weight:500; transition: color .25s; }
@@ -29,8 +30,6 @@ body{ background:var(--fondo); color:var(--texto); }
 .btn-outline:hover{ background:var(--acento); color:#fff; }
 .btn-primary{ background:var(--acento); color:#fff; border:none; }
 .btn-primary:hover{ background:#06bce8; }
-
-
 .enlaces-nav.activo{ display:flex; flex-direction:column; position:absolute; top:70px; right:20px;
   background:#fff; padding:18px; border-radius:10px; box-shadow:0 6px 14px rgba(0,0,0,0.12); }
 
@@ -39,179 +38,116 @@ body{ background:var(--fondo); color:var(--texto); }
   display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap;
   padding:80px 10%; background: linear-gradient(120deg, #0A2540, #143d63); color:var(--texto-claro);
 }
-.contenido-principal{ max-width:520px; }
-.seccion-principal h1{ font-size:2rem; margin-bottom:18px; line-height:1.25; }
-.hero-subtitulo{ color:#cfd7e8; margin-bottom:22px; }
-.botones-tiendas img{ height:48px; margin-right:10px; }
-
-
-.imagen-principal img{ max-width:460px; width:100%; border-radius:12px; box-shadow:0 6px 18px rgba(0,0,0,0.25); }
-
-
 .titulo-seccion{ width:100%; text-align:center; font-size:2rem; font-weight:600; margin-bottom:25px; color:var(--texto); }
 
-.seccion-servicios{
-  display:flex; flex-wrap:wrap; justify-content:center; gap:36px; padding:70px 10%; background:#fff;
+
+
+/* Contenido*/
+
+.about-us {
+  padding: 120px 10% 80px 10%;
 }
-.tarjeta-servicio{
-  background:rgba(255,255,255,0.94); border-radius:16px; width:260px; padding:16px 18px; text-align:center;
-  box-shadow:0 5px 15px rgba(0,0,0,0.05); transition:all .28s;
+
+.about-us:nth-child(odd) { background: #fff; }
+.about-us:nth-child(even) { background:  #f7f9fc; }
+
+.contenido-about {
+  display: flex;
+  align-items: center;
+  gap: 50px;
+  flex-wrap: wrap;
 }
-.tarjeta-servicio img{ width:60px; margin-bottom:12px; }
-.tarjeta-servicio h3{ color:var(--primario); margin-bottom:8px; }
-.tarjeta-servicio:hover{ transform:translateY(-8px); box-shadow:0 12px 26px rgba(0,0,0,0.09); }
 
+.texto-about { flex: 0 0 45%; }
+.texto-about h2 { font-size: 2rem; margin-bottom: 18px; color: var(--primario); }
+.texto-about p { line-height: 1.6; color: var(--texto); }
 
-.seccion-beneficios{ padding:80px 10%; background:var(--fondo); text-align:center; }
-.contenedor-beneficios{
-  display:grid; grid-template-columns:repeat(3,1fr); gap:30px; max-width:1100px; margin:0 auto;
+.imagen-about { flex: 0 0 45%; text-align: right; }
+.imagen-about img {
+  width: 100%;
+  max-width: 400px;
+  border-radius: 12px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.1);
+  transition: transform 0.3s, box-shadow 0.3s;
 }
-.tarjeta-beneficio{
-  background:#fff; padding:28px 22px; border-radius:16px; box-shadow:0 6px 18px rgba(0,0,0,0.06);
-  transition:transform .25s, box-shadow .25s;
+
+#nosotros .imagen-about img {
+  max-width: 300px;  
 }
-.tarjeta-beneficio img{ width:68px; margin-bottom:14px; filter: drop-shadow(0 6px 8px rgba(0,0,0,0.06)); }
-.tarjeta-beneficio h3{ font-size:1.15rem; color:#17324a; margin-bottom:8px; }
-.tarjeta-beneficio p{ color:#4a5568; line-height:1.5; }
+.imagen-about img:hover { transform: scale(1.08); box-shadow: 0 12px 28px rgba(0,0,0,0.2); }
+
+#diferencia .contenido-about { flex-direction: row; }
+#diferencia .imagen-about img { transform: translateX(-150px); }
+#diferencia .imagen-about img:hover { transform: translateX(-150px) scale(1.08); }
+
+/* Mision - Vision*/
+
+.seccion-mision-vision {
+  padding: 80px 10%;
+  background: #fff; /* gris claro */
+  text-align: center;
+}
 
 
-.seccion-opiniones{ padding:70px 10%; }
-.contenedor-opiniones{ display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:24px; max-width:1000px; margin:0 auto; }
-.tarjeta-opinion{ background:#fff; padding:22px; border-radius:12px; box-shadow:0 6px 16px rgba(0,0,0,0.06); }
-.tarjeta-opinion p{ font-style:italic; margin-bottom:12px; }
+.contenedor-mision-vision {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  flex-wrap: wrap;
+  max-width: 900px;
+  margin: 0 auto;
+}
 
+.tarjeta-mision-vision {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: #fff; 
+  padding: 28px 22px;
+  border-radius: 16px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+  max-width: 300px;
+  transition: transform 0.28s, box-shadow 0.28s;
+  cursor: pointer; 
+}
+
+.tarjeta-mision-vision:hover {
+  transform: translateY(-8px); 
+  box-shadow: 0 12px 26px rgba(0,0,0,0.09); 
+}
+
+.tarjeta-mision-vision img {
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
+  margin-bottom: 14px;
+  border-radius: 12px; 
+}
+
+.tarjeta-mision-vision h3 {
+  font-size: 1.3rem;
+  color: var(--primario);
+  margin-bottom: 8px;
+}
+
+.tarjeta-mision-vision p {
+  color: var(--texto);
+  line-height: 1.5;
+  text-align: center;
+}
+
+/* Parte final */
 
 .seccion-accion{ text-align:center; padding:60px 10%; background:#0a66c2; color:#fff; }
 .seccion-accion h2{ font-size:1.9rem; margin-bottom:10px; }
 
 
 .pie-pagina {
-  background: #052038; 
-  color: #ffffff;
-  padding: 60px 10%;
-  display: flex;
-  justify-content: space-between;
-  gap: 60px;
+  background:#052038; color:#ffffff; padding:60px 10%;
+  display:flex; justify-content:space-between; gap:60px;
 }
-
-.columna-pie h4 {
-  color: #2ecbff;  
-  font-size: 1.1rem;
-  margin-bottom: 15px;
-  font-weight: 600;
-}
-
-.columna-pie ul {
-  list-style: none;
-}
-
-.columna-pie ul li {
-  margin-bottom: 10px;
-}
-
-.columna-pie ul li a {
-  color: #d9e6ef; 
-  text-decoration: none;
-  font-size: 0.95rem;
-}
-
-.columna-pie ul li a:hover {
-  color: #2ecbff; 
-}
-
-
-
-
-
-.about-us {
-  padding-top: 120px;  /* suficiente para que no quede encima del menú */
-  padding-bottom: 80px;
-  padding-left: 10%;
-  padding-right: 10%;
-  background: var(--fondo);
-}
-
-.contenido-about {
-  display: flex;
-  align-items: center;       /* Alinea verticalmente texto e imagen */
-  justify-content: flex-start; 
-  gap: 50px;                 /* Espacio entre texto e imagen */
-  flex-wrap: wrap;           /* Para pantallas pequeñas se apilen */
-}
-
-.texto-about {
-  flex: 0 0 45%;             /* Texto ocupa el 45% del ancho */
-}
-
-.texto-about h2 {
-  font-size: 2rem;
-  margin-bottom: 18px;
-  color: var(--primario);
-}
-
-.texto-about p {
-  line-height: 1.6;
-  color: var(--texto);
-}
-
-.imagen-about {
-  flex: 0 0 45%;             /* Imagen ocupa el 45% del ancho */
-  text-align: right;         /* Imagen a la derecha */
-}
-
-.imagen-about img {
-  width: 100%;
-  max-width: 400px;          /* Tamaño fijo máximo */
-  border-radius: 12px;
-  box-shadow: 0 6px 18px rgba(0,0,0,0.1);
-}
-
-#diferencia .imagen-about img {
-  transform: translateX(-140px); /* mueve solo la imagen hacia la izquierda */
-}
-.seccion-mision-vision{
-  padding:80px 10%;
-  background:var(--fondo);
-  text-align:center;
-}
-
-.contenedor-mision-vision{
-  display:flex;
-  justify-content:center;
-  gap:40px;
-  flex-wrap:wrap;
-  max-width:900px;
-  margin:0 auto;
-}
-
-.tarjeta-mision-vision{
-  display:flex;
-  flex-direction:column;       /* organiza imagen, título y texto en columna */
-  align-items:center;          /* centra todo horizontalmente */
-  background:#fff;
-  padding:28px 22px;
-  border-radius:16px;
-  box-shadow:0 6px 18px rgba(0,0,0,0.06);
-  max-width:300px;             /* tarjetas iguales */
-  transition:transform .25s, box-shadow .25s;
-}
-
-.tarjeta-mision-vision img{
-  width:120px;                 /* ancho igual para todas */
-  height:120px;                /* altura igual para todas */
-  object-fit:cover;            /* mantiene proporción sin deformar */
-  margin-bottom:14px;
-  filter: drop-shadow(0 6px 8px rgba(0,0,0,0.06));
-}
-
-.tarjeta-mision-vision h3{
-  font-size:1.3rem;
-  color:var(--primario);
-  margin-bottom:8px;
-}
-
-.tarjeta-mision-vision p{
-  color:var(--texto);
-  line-height:1.5;
-  text-align:center;           /* centra el texto debajo de la imagen */
-}
+.columna-pie h4 { color:#2ecbff; font-size:1.1rem; margin-bottom:15px; font-weight:600; }
+.columna-pie ul { list-style:none; }
+.columna-pie ul li { margin-bottom:10px; }
+.columna-pie ul li a { color:#d9e6ef; text-decoration:none; font-size:0.95rem; }
+.columna-pie ul li a:hover { color:#2ecbff; }
