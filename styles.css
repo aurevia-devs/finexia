@@ -1,12 +1,9 @@
-/* ==========================================================
-   ESTILOS BASE E IMPORTACIONES (DE TU styles.css ORIGINAL)
-   ========================================================== */
+
 
 * { 
   margin:0; 
   padding:0; 
   box-sizing:border-box; 
-  /* Asegura que la fuente Poppins (cargada en el HTML) se use */
   font-family: 'Poppins', Inter, Arial, sans-serif; 
 }
 
@@ -23,9 +20,7 @@ body{
   color:var(--texto); 
 }
 
-/* ==========================================================
-   BARRA DE NAVEGACIÓN (DE TU styles.css ORIGINAL)
-   ========================================================== */
+
 
 .barra-navegacion{
   display:flex; align-items:center; justify-content:space-between;
@@ -50,15 +45,13 @@ body{
 .enlaces-nav.activo{ display:flex; flex-direction:column; position:absolute; top:70px; right:20px;
   background:#fff; padding:18px; border-radius:10px; box-shadow:0 6px 14px rgba(0,0,0,0.12); }
 
-/* ==========================================================
-   SECCIONES GENERALES (DE TU styles.css ORIGINAL)
-   ========================================================== */
 
-/* Estilo para la sección principal (Home Page) */
+
+
 .seccion-principal{
   display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap;
   padding:80px 10%; background: linear-gradient(120deg, #0A2540, #143d63); color:var(--texto-claro);
-  /* Propiedades de imagen de fondo se mantienen si las usas */
+
 }
 .contenido-principal{ max-width:520px; }
 .seccion-principal h1{ font-size:2rem; margin-bottom:18px; line-height:1.25; }
@@ -145,13 +138,10 @@ body{
   color: #2ecbff;  
 }
 
-/* ==========================================================
-   SECCIÓN DE PLANES Y PRECIOS (DE planes.css)
-   ========================================================== */
 
 .seccion-planes {
   padding: 60px 10%;
-  background: #ffffff; /* Fondo blanco para destacar las tarjetas */
+  background: #ffffff; 
   text-align: center;
 }
 
@@ -170,7 +160,7 @@ body{
 }
 
 .tarjeta-plan {
-  background: var(--fondo); /* Fondo claro similar al de las tarjetas originales */
+  background: var(--fondo); 
   padding: 30px 20px;
   border-radius: 12px;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
@@ -234,7 +224,7 @@ body{
   padding-left: 20px; 
 }
 
-/* Estilo del checkmark para las características */
+
 .cuerpo-plan ul li::before {
   content: '✓'; 
   color: var(--acento);
@@ -250,13 +240,13 @@ body{
   padding: 10px 20px;
 }
 
-/* Estilo para Plan Pro destacado */
+
 .tarjeta-plan.pro {
   border: 2px solid var(--acento); 
-  box-shadow: 0 10px 30px rgba(0, 212, 255, 0.2); /* Sombra de acento */
+  box-shadow: 0 10px 30px rgba(0, 212, 255, 0.2); 
 }
 
-/* Media Query para responsividad */
+
 @media (max-width: 992px) {
   .contenedor-planes {
     flex-direction: column;
@@ -272,4 +262,5 @@ body{
   .barra-navegacion {
     padding: 18px 20px;
   }
+
 }
