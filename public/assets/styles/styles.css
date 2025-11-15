@@ -524,3 +524,129 @@ body{
     text-align:center;
   }
 }
+
+.seccion-planes {
+  padding: 60px 10%;
+  background: #ffffff; 
+  text-align: center;
+}
+
+.subtitulo-planes {
+  color: #4a5568;
+  margin-bottom: 40px;
+  font-size: 1.1rem;
+}
+
+.contenedor-planes {
+  display: flex;
+  justify-content: center;
+  gap: 30px; 
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.tarjeta-plan {
+  background: var(--fondo); 
+  padding: 30px 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+  width: 300px; 
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  min-height: 380px; 
+}
+
+.tarjeta-plan:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
+}
+
+.header-plan {
+  margin-bottom: 25px;
+  text-align: center;
+  width: 100%;
+}
+
+.header-plan h3 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--primario);
+  margin-bottom: 10px;
+}
+
+.precio {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--acento); 
+  line-height: 1;
+}
+
+.unidad {
+  font-size: 1rem;
+  font-weight: 500;
+  color: #6c757d;
+}
+
+.cuerpo-plan {
+  text-align: left;
+  margin-bottom: 30px;
+  flex-grow: 1; 
+  width: 100%;
+}
+
+.cuerpo-plan ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.cuerpo-plan ul li {
+  font-size: 1rem;
+  color: #4a5568;
+  margin-bottom: 8px;
+  position: relative;
+  padding-left: 20px; 
+}
+
+
+.cuerpo-plan ul li::before {
+  content: '✓'; 
+  color: var(--acento);
+  font-weight: 800;
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+.plan-btn {
+  margin-top: auto; 
+  width: 90%;
+  padding: 10px 20px;
+}
+
+
+.tarjeta-plan.pro {
+  border: 2px solid var(--acento); 
+  box-shadow: 0 10px 30px rgba(0, 212, 255, 0.2); 
+}
+
+
+@media (max-width: 992px) {
+  .contenedor-planes {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .tarjeta-plan {
+    width: 90%; 
+    max-width: 400px;
+    min-height: initial; 
+  }
+
+  .barra-navegacion {
+    padding: 18px 20px;
+  }
+
+}
