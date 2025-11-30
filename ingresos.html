@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Registro de Ingresos - FinexIA</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #c8f7c5, #92e6a7);
+      margin: 0;
+      padding: 0;
+    }
+
+    .ingresos-container {
+      max-width: 650px;
+      margin: 40px auto;
+      background-color: #ffffffee;
+      padding: 30px;
+      border-radius: 20px;
+      backdrop-filter: blur(4px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+      border: 2px solid #a3e7a1;
+      animation: fadeIn 0.4s ease;
+    }
+
+    .ingresos-container h2, 
+    .ingresos-container h3 {
+      text-align: center;
+      color: #2e7d32;
+      margin-bottom: 10px;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 20px;
+    }
+
+    label {
+      font-weight: bold;
+      color: #2e4d2e;
+    }
+
+    input {
+      padding: 12px;
+      border-radius: 10px;
+      border: 2px solid #b2dfb2;
+      background-color: #fafffa;
+      font-size: 15px;
+      transition: 0.2s;
+    }
+
+    input:focus {
+      border-color: #4caf50;
+      outline: none;
+      background-color: #ffffff;
+      box-shadow: 0 0 8px rgba(76, 175, 80, 0.4);
+    }
+
+    button {
+      margin-top: 10px;
+      padding: 12px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-size: 18px;
+      cursor: pointer;
+      transition: 0.2s;
+      font-weight: bold;
+    }
+
+    button:hover {
+      background-color: #3ea544;
+      transform: translateY(-2px);
+      box-shadow: 0 5px 12px rgba(0,0,0,0.2);
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+      margin-top: 20px;
+    }
+
+    li {
+      background-color: #e8f5e9;
+      border-left: 6px solid #4CAF50;
+      margin-top: 12px;
+      padding: 12px;
+      border-radius: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 15px;
+      box-shadow: 0 3px 8px rgba(0, 0, 0, 0.07);
+      animation: fadeIn 0.3s ease;
+    }
+
+    .eliminar-ingreso-btn {
+      padding: 8px 12px;
+      font-size: 12px;
+      border: none;
+      border-radius: 8px;
+      background-color: #f44336;
+      color: white;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .eliminar-ingreso-btn:hover {
+      background-color: #d32f2f;
+      transform: scale(1.05);
+    }
+
+    #saldoTotalIngresos {
+      font-weight: bold;
+      color: #1b5e20;
+      font-size: 20px;
+    }
+
+</style>
+
+  </style>
+
+  </style>
+</head>
+<body>
+
+  <div class="ingresos-container">
+    <h2>💰 Registrar Ingresos</h2>
+
+    <form id="ingresoForm">
+      <label for="tipoIngreso">Tipo de ingreso:</label>
+      <input type="text" id="tipoIngreso" placeholder="Ej: Salario, Ventas" required>
+
+      <label for="montoIngreso">Monto ($):</label>
+      <input type="number" id="montoIngreso" placeholder="0.00" step="0.01" required>
+
+      <label for="fechaIngreso">Fecha:</label>
+      <input type="date" id="fechaIngreso" required>
+
+      <button type="submit">Guardar Ingreso</button>
+    </form>
+
+    <h3>Ingresos Registrados</h3>
+    <ul id="listaIngresos"></ul>
+
+    <h3>Saldo Total: $<span id="saldoTotalIngresos">0.00</span></h3>
+  </div>
+
+  <script>
+    let ingresos = JSON.parse(localStorage.getItem('ingresos')) || [];
+
+    const ingresoForm = document.getElementById('ingresoForm');
+    const listaIngresos = document.getElementById('listaIngresos');
+    const saldoTotalIngresosEl = document.getElementById('saldoTotalIngresos');
+
+    function actualizarListaIngresos() {
+      listaIngresos.innerHTML = '';
+      ingresos.forEach((ingreso, index) => {
+        const li = document.createElement('li');
+        li.innerHTML = `
+          ${ingreso.fecha} - ${ingreso.tipo}: $${ingreso.monto.toFixed(2)}
+          <button class="eliminar-ingreso-btn" data-index="${index}">Eliminar</button>
+        `;
+        listaIngresos.appendChild(li);
+      });
+
+      document.querySelectorAll('.eliminar-ingreso-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          const index = e.target.getAttribute('data-index');
+          eliminarIngreso(index);
+        });
+      });
+    }
+
+    function actualizarSaldoIngresos() {
+      const saldoTotal = ingresos.reduce((sum, i) => sum + i.monto, 0);
+      saldoTotalIngresosEl.textContent = saldoTotal.toFixed(2);
+      return saldoTotal;
+    }
+
+    function eliminarIngreso(index) {
+      ingresos.splice(index, 1);
+      localStorage.setItem('ingresos', JSON.stringify(ingresos));
+      actualizarListaIngresos();
+      actualizarSaldoIngresos();
+    }
+
+    ingresoForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const tipo = document.getElementById('tipoIngreso').value;
+      const monto = parseFloat(document.getElementById('montoIngreso').value);
+      const fecha = document.getElementById('fechaIngreso').value;
+
+      if (!tipo || !monto || !fecha) return alert("Completa todos los campos");
+
+      ingresos.push({ tipo, monto, fecha });
+      localStorage.setItem('ingresos', JSON.stringify(ingresos));
+
+      ingresoForm.reset();
+      actualizarListaIngresos();
+      actualizarSaldoIngresos();
+    });
+
+    actualizarListaIngresos();
+    actualizarSaldoIngresos();
+  </script>
+
+</body>
+</html>
