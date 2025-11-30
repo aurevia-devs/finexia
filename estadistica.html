@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Estadísticas de Gastos - FinexIA</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+ body {
+      font-family: 'Poppins', sans-serif;
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(135deg, #36d1c4, #6be8c7, #9ff5d3);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .estadisticas-container {
+      width: 90%;
+      max-width: 850px;
+      background: #ffffffee;
+      padding: 30px;
+      border-radius: 20px;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+      text-align: center;
+      backdrop-filter: blur(10px);
+      animation: fadeIn 0.5s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    h2 {
+      font-size: 28px;
+      font-weight: 600;
+      margin-bottom: 15px;
+      color: #1f2937;
+    }
+
+    .controls {
+      margin-top: 10px;
+      margin-bottom: 25px;
+    }
+
+    select {
+      padding: 12px;
+      border-radius: 10px;
+      border: 2px solid #3db766;
+      font-size: 16px;
+      outline: none;
+      background: #f0f7ff;
+      transition: 0.3s;
+    }
+
+    select:hover {
+      border-color: #3db766;
+    }
+
+    button {
+      padding: 12px 20px;
+      border: none;
+      border-radius: 10px;
+      background: #3db766;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+      transition: 0.3s;
+      margin-left: 10px;
+    }
+
+    button:hover {
+      background: #5dd191;
+    }
+
+    canvas {
+      margin-top: 20px;
+      border-radius: 15px;
+    }
+
+    .no-data {
+      margin-top: 25px;
+      color: #3db766;
+      font-size: 18px;
+      font-weight: 500;
+    }
+
+  </style>
+</head>
+<body>
+
+  <div class="estadisticas-container">
+    <h2>📊 Estadísticas de Gastos por Categoría</h2>
+
+    <label for="periodo">Selecciona periodo:</label>
+    <select id="periodo">
+      <option value="todos">Todos</option>
+      <option value="7">Últimos 7 días</option>
+      <option value="30">Últimos 30 días</option>
+    </select>
+    <button id="generarEstadisticas">Generar Estadísticas</button>
+
+    <canvas id="gastosChart" width="400" height="400"></canvas>
+  </div>
+
+  <script>
+    const generarBtn = document.getElementById('generarEstadisticas');
+    const periodoSelect = document.getElementById('periodo');
+    let chartInstance;
+
+    function generarGrafico(periodo) {
+      const gastos = JSON.parse(localStorage.getItem('gastos')) || [];
+
+      let filteredGastos = gastos;
+
+      if (periodo !== 'todos') {
+        const dias = parseInt(periodo);
+        const fechaLimite = new Date();
+        fechaLimite.setDate(fechaLimite.getDate() - dias);
+
+        filteredGastos = gastos.filter(g => new Date(g.fecha) >= fechaLimite);
+      }
+
+      const categorias = {};
+      filteredGastos.forEach(g => {
+        categorias[g.categoria] = (categorias[g.categoria] || 0) + g.monto;
+      });
+
+      const labels = Object.keys(categorias);
+      const data = Object.values(categorias);
+
+      if (chartInstance) chartInstance.destroy();
+
+      const ctx = document.getElementById('gastosChart').getContext('2d');
+      chartInstance = new Chart(ctx, {
+        type: 'pie',
+        data: {
+          labels: labels,
+          datasets: [{
+            data: data,
+            backgroundColor: [
+              '#FF6384',
+              '#36A2EB',
+              '#FFCE56',
+              '#4BC0C0',
+              '#9966FF',
+              '#FF9F40'
+            ]
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: {
+              position: 'bottom'
+            },
+            title: {
+              display: true,
+              text: 'Distribución de Gastos por Categoría'
+            }
+          }
+        }
+      });
+    }
+
+    generarBtn.addEventListener('click', () => {
+      const periodo = periodoSelect.value;
+      generarGrafico(periodo);
+    });
+
+    generarGrafico('todos');
+  </script>
+
+</body>
+</html>
