@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ChatBot Financiero - FinexIA</title>
+  <style>
+body {
+  font-family: Aria l, sans-serif;
+  background: linear-gradient(135deg, #dfe9f3, #f7f9fc);
+  margin: 0;
+  padding: 20px;
+  position: relative;
+  overflow-x: hidden;
+}
+
+body::before, body::after {
+  content: "";
+  position: absolute;
+  width: 180px;
+  height: 180px;
+  background: rgba(76, 175, 80, 0.18);
+  border-radius: 50%;
+  filter: blur(60px);
+}
+
+body::before {
+  top: -60px;
+  left: -50px;
+}
+
+body::after {
+  bottom: -80px;
+  right: -40px;
+}
+
+.chat-container {
+  max-width: 600px;
+  margin: 0 auto;
+  background-color: #ffffffee;
+  border-radius: 18px;
+  box-shadow: 0 8px 22px rgba(0,0,0,0.15);
+  padding: 25px;
+  display: flex;
+  flex-direction: column;
+  height: 80vh;
+  border: 2px solid rgba(0,0,0,0.05);
+  backdrop-filter: blur(6px);
+  position: relative;
+  overflow: hidden;
+}
+
+.chat-container::after {
+  content: "";
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  width: calc(100% + 4px);
+  height: calc(100% + 4px);
+  border-radius: 20px;
+  background: linear-gradient(
+    120deg,
+    #4CAF50,
+    #2196F3,
+    #4CAF50
+  );
+  z-index: -1;
+  background-size: 300% 300%;
+  animation: bordeAnimado 8s ease infinite;
+  opacity: 0.4;
+}
+
+@keyframes bordeAnimado {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+h2 {
+  text-align: center;
+  color: #333;
+  margin-bottom: 15px;
+  font-weight: 900;
+  letter-spacing: 0.5px;
+  font-size: 24px;
+  text-shadow: 0 2px 6px rgba(0,0,0,0.15);
+}
+
+#chatWindow {
+  flex: 1;
+  border: 1px solid #d1d1d1;
+  border-radius: 10px;
+  padding: 12px;
+  overflow-y: auto;
+  margin-bottom: 12px;
+  background: linear-gradient(180deg, #fafafa, #f1f1f1);
+  box-shadow: inset 0 0 12px rgba(0,0,0,0.06);
+}
+
+.mensaje {
+  margin: 8px 0;
+  padding: 12px 15px;
+  border-radius: 14px;
+  max-width: 80%;
+  word-wrap: break-word;
+  font-size: 15px;
+  line-height: 1.4;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+  position: relative;
+}
+
+.usuario {
+  background-color: #4CAF50;
+  color: white;
+  align-self: flex-end;
+  border-bottom-right-radius: 4px;
+}
+
+.bot {
+  background-color: #2196F3;
+  color: white;
+  align-self: flex-start;
+  border-bottom-left-radius: 4px;
+}
+
+#mensajeInput {
+  padding: 12px;
+  font-size: 16px;
+  flex: 1;
+  border-radius: 10px;
+  border: 1px solid #bbb;
+  background: #ffffff;
+  min-height: 40px;
+  resize: vertical;
+  transition: 0.25s;
+}
+
+#mensajeInput:focus {
+  border-color: #4CAF50;
+  box-shadow: 0 0 8px rgba(76, 175, 80, 0.4);
+  outline: none;
+}
+
+#enviarBtn {
+  padding: 12px 18px;
+  font-size: 16px;
+  border: none;
+  border-radius: 10px;
+  background-color: #4CAF50;
+  color: white;
+  cursor: pointer;
+  margin-left: 10px;
+  font-weight: bold;
+  transition: 0.2s;
+}
+
+#enviarBtn:hover {
+  background-color: #3e8d43;
+  transform: scale(1.05);
+}
+
+.input-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+  </style>
+</head>
+<body>
+
+  <div class="chat-container">
+    <h2>ChatBot Financiero 🤖</h2>
+    <div id="chatWindow"></div>
+
+    <div class="input-group">
+      <input type="text" id="mensajeInput" placeholder="Escribe tu consulta aquí...">
+      <button id="enviarBtn">Enviar</button>
+    </div>
+  </div>
+
+  <script>
+    const chatWindow = document.getElementById('chatWindow');
+    const mensajeInput = document.getElementById('mensajeInput');
+    const enviarBtn = document.getElementById('enviarBtn');
+
+    function agregarMensaje(texto, tipo) {
+      const div = document.createElement('div');
+      div.classList.add('mensaje', tipo);
+      div.textContent = texto;
+      chatWindow.appendChild(div);
+      chatWindow.scrollTop = chatWindow.scrollHeight;
+    }
+
+    function responderConsulta(mensaje) {
+      const gastos = JSON.parse(localStorage.getItem('gastos')) || [];
+      const ingresos = JSON.parse(localStorage.getItem('ingresos')) || [];
+      const metas = JSON.parse(localStorage.getItem('metas')) || [];
+
+      const totalGastos = gastos.reduce((sum, g) => sum + g.monto, 0);
+      const totalIngresos = ingresos.reduce((sum, i) => sum + i.monto, 0);
+      const saldo = totalIngresos - totalGastos;
+
+      mensaje = mensaje.toLowerCase();
+
+      if (mensaje.includes("saldo")) {
+        agregarMensaje(`Tu saldo actual es $${saldo.toFixed(2)}`, 'bot');
+      } else if (mensaje.includes("gasto") || mensaje.includes("gastando")) {
+        const categorias = {};
+        gastos.forEach(g => {
+          categorias[g.categoria] = (categorias[g.categoria] || 0) + g.monto;
+        });
+        const categoriaMayor = Object.keys(categorias).reduce((a,b) => categorias[a] > categorias[b] ? a : b, "Ninguna");
+        agregarMensaje(`Hasta ahora, estás gastando más en la categoría: ${categoriaMayor}`, 'bot');
+      } else if (mensaje.includes("meta")) {
+        if (metas.length === 0) {
+          agregarMensaje("No tienes metas de ahorro registradas.", 'bot');
+        } else {
+          const progreso = metas.map(m => `${m.nombre}: ${((m.actual/m.monto)*100).toFixed(1)}%`).join("\n");
+          agregarMensaje(`Progreso de tus metas:\n${progreso}`, 'bot');
+        }
+      } else {
+        agregarMensaje("Lo siento, no entiendo tu consulta. Puedes preguntar por saldo, gasto o meta.", 'bot');
+      }
+    }
+
+    enviarBtn.addEventListener('click', () => {
+      const texto = mensajeInput.value.trim();
+      if (!texto) return;
+
+      agregarMensaje(texto, 'usuario');
+      responderConsulta(texto);
+      mensajeInput.value = '';
+    });
+
+    mensajeInput.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') enviarBtn.click();
+    });
+
+  </script>
+
+</body>
+</html>
