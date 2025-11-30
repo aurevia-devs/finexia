@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Metas de Ahorro - FinexIA</title>
+  <style>
+  body {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #c8f7c5, #92e6a7);
+    margin: 0;
+    padding: 0;
+  }
+
+  .metas-container {
+    max-width: 650px;
+    margin: 40px auto;
+    background-color: #ffffffee;
+    padding: 30px;
+    border-radius: 20px;
+    border: 2px solid #a3e7a1;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+    backdrop-filter: blur(5px);
+    animation: fadeIn 0.4s ease;
+  }
+
+  .metas-container h2,
+  .metas-container h3 {
+    text-align: center;
+    color: #2e7d32;
+    margin-bottom: 10px;
+  }
+
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 20px;
+  }
+
+  label {
+    font-weight: bold;
+    color: #2e4d2e;
+  }
+
+  input {
+    padding: 12px;
+    border-radius: 10px;
+    border: 2px solid #b2dfb2;
+    background-color: #fafffa;
+    font-size: 15px;
+    transition: 0.2s;
+  }
+
+  input:focus {
+    border-color: #4caf50;
+    outline: none;
+    background-color: #ffffff;
+    box-shadow: 0 0 8px rgba(76,175,80,0.4);
+  }
+
+  button {
+    padding: 12px;
+    margin-top: 10px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 17px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.2s;
+  }
+
+  button:hover {
+    background-color: #3ea544;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 12px rgba(0,0,0,0.2);
+  }
+
+  ul {
+    list-style: none;
+    padding: 0;
+    margin-top: 25px;
+  }
+
+  li {
+    background-color: #e8f5e9;
+    border-left: 6px solid #4CAF50;
+    margin-top: 15px;
+    padding: 15px;
+    border-radius: 12px;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.08);
+    animation: fadeIn 0.3s ease;
+    font-size: 15px;
+  }
+
+  .progreso-bar {
+    background-color: #c7e6c9;
+    border-radius: 8px;
+    overflow: hidden;
+    height: 22px;
+    margin-top: 10px;
+  }
+
+  .progreso-fill {
+    height: 100%;
+    background-color: #2e7d32;
+    width: 0%;
+    text-align: center;
+    color: white;
+    line-height: 22px;
+    font-size: 12px;
+    font-weight: bold;
+    transition: width 0.4s ease;
+  }
+
+  .aporte-btn, .eliminar-meta-btn {
+    margin-top: 10px;
+    padding: 7px 10px;
+    font-size: 13px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: 0.2s;
+  }
+
+  .aporte-btn {
+    background-color: #2196F3;
+    color: white;
+  }
+  .aporte-btn:hover {
+    background-color: #1976D2;
+    transform: scale(1.05);
+  }
+
+  .eliminar-meta-btn {
+    background-color: #f44336;
+    color: white;
+  }
+  .eliminar-meta-btn:hover {
+    background-color: #d32f2f;
+    transform: scale(1.05);
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+</style>
+
+  </style>
+</head>
+<body>
+
+  <div class="metas-container">
+    <h2>Metas de Ahorro</h2>
+
+    <form id="metaForm">
+      <label for="nombreMeta">Nombre de la meta:</label>
+      <input type="text" id="nombreMeta" placeholder="Ej: Viaje a París" required>
+
+      <label for="montoMeta">Monto objetivo ($):</label>
+      <input type="number" id="montoMeta" placeholder="1000" required>
+
+      <label for="periodoMeta">Periodo (meses):</label>
+      <input type="number" id="periodoMeta" placeholder="12" required>
+
+      <label for="fechaLimiteMeta">Fecha límite:</label>
+      <input type="date" id="fechaLimiteMeta" required>
+
+      <button type="submit">Crear Meta</button>
+    </form>
+
+    <h3>Mis metas</h3>
+    <ul id="listaMetas"></ul>
+  </div>
+
+  <script>
+    let metas = JSON.parse(localStorage.getItem('metas')) || [];
+
+    const metaForm = document.getElementById('metaForm');
+    const listaMetas = document.getElementById('listaMetas');
+
+    function actualizarListaMetas() {
+      listaMetas.innerHTML = '';
+
+      metas.forEach((meta, index) => {
+        const progreso = Math.min((meta.actual / meta.monto) * 100, 100);
+
+        if (progreso >= 100) return;
+
+        const li = document.createElement('li');
+        li.innerHTML = `
+          <strong>${meta.nombre}</strong> - Objetivo: $${meta.monto} en ${meta.periodo} meses
+          <br>Fecha límite: ${meta.fechaLimite}
+          <div class="progreso-bar">
+            <div class="progreso-fill" style="width: ${progreso}%;">${progreso.toFixed(1)}%</div>
+          </div>
+          <button class="aporte-btn" data-index="${index}">He realizado aporte</button>
+          <button class="eliminar-meta-btn" data-index="${index}">Eliminar</button>
+        `;
+        listaMetas.appendChild(li);
+      });
+
+      document.querySelectorAll('.aporte-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          const index = e.target.getAttribute('data-index');
+          agregarAporte(index);
+        });
+      });
+
+      document.querySelectorAll('.eliminar-meta-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          const index = e.target.getAttribute('data-index');
+          eliminarMeta(index);
+        });
+      });
+    }
+
+    function agregarAporte(index) {
+      const aporte = parseFloat(prompt("Ingresa el monto a aportar:"));
+      if (isNaN(aporte) || aporte <= 0) return alert("Monto inválido");
+
+      metas[index].actual += aporte;
+      localStorage.setItem('metas', JSON.stringify(metas));
+
+      if (metas[index].actual >= metas[index].monto) {
+        alert(`¡Felicidades! Has alcanzado tu meta: ${metas[index].nombre}`);
+      }
+
+      actualizarListaMetas();
+    }
+
+    function eliminarMeta(index) {
+      metas.splice(index, 1);
+      localStorage.setItem('metas', JSON.stringify(metas));
+      actualizarListaMetas();
+    }
+
+    metaForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const nombre = document.getElementById('nombreMeta').value;
+      const monto = parseFloat(document.getElementById('montoMeta').value);
+      const periodo = parseInt(document.getElementById('periodoMeta').value);
+      const fechaLimite = document.getElementById('fechaLimiteMeta').value;
+
+      if (!nombre || !monto || !periodo || !fechaLimite) return alert("Completa todos los campos");
+
+      metas.push({ nombre, monto, periodo, actual: 0, fechaLimite });
+      localStorage.setItem('metas', JSON.stringify(metas));
+
+      metaForm.reset();
+      actualizarListaMetas();
+    });
+
+    actualizarListaMetas();
+  </script>
+
+</body>
+</html>
