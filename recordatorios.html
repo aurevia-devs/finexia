@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Recordatorios - FinexIA</title>
+  <style>
+body {
+  font-family: "Segoe UI", Roboto, Arial, sans-serif;
+  background: #e7ecf5;
+  margin: 0;
+  padding: 20px;
+  color: #333;
+}
+
+.container {
+  max-width: 800px;
+  margin: auto;
+  background-color: #ffffff;
+  padding: 30px;
+  border-radius: 18px;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+  border: 1px solid #dce3f0;
+}
+
+h1 {
+  text-align: center;
+  color: #1a237e;
+  margin-bottom: 25px;
+  font-size: 30px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+h2 {
+  margin-top: 35px;
+  font-size: 22px;
+  color: #283593;
+  background: #eef2ff;
+  padding: 10px 15px;
+  border-radius: 10px;
+  border-left: 5px solid #3f51b5;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.06);
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+  margin-top: 10px;
+}
+
+li {
+  background-color: #ffffff;
+  margin-top: 15px;
+  padding: 18px;
+  border-radius: 12px;
+  border: 1px solid #d1d9e6;
+  box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+li:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+}
+
+.progreso-bar {
+  background-color: #e0e7f3;
+  border-radius: 5px;
+  overflow: hidden;
+  height: 22px;
+  margin-top: 8px;
+  border: 1px solid #c5cee0;
+}
+
+.progreso-fill {
+  height: 100%;
+  background: linear-gradient(to right, #42a5f5, #1e88e5);
+  width: 0%;
+  text-align: center;
+  color: white;
+  line-height: 22px;
+  font-size: 13px;
+  font-weight: 600;
+  transition: width 0.4s ease;
+}
+
+button {
+  margin-top: 10px;
+  margin-right: 6px;
+  padding: 8px 14px;
+  font-size: 13px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.15s ease;
+  font-weight: 500;
+}
+
+button:hover {
+  transform: scale(1.03);
+}
+
+.aporte-btn {
+  background-color: #1e88e5;
+  color: white;
+}
+.aporte-btn:hover {
+  background-color: #1565c0;
+}
+
+.hecho-btn {
+  background-color: #4caf50;
+  color: white;
+}
+.hecho-btn:hover {
+  background-color: #2e7d32;
+}
+
+.eliminar-btn {
+  background-color: #f44336;
+  color: white;
+}
+.eliminar-btn:hover {
+  background-color: #c62828;
+}
+
+#saldoTotal {
+  font-weight: bold;
+  color: #2e7d32;
+  font-size: 20px;
+}
+
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1>⏱️ Recordatorios</h1>
+
+    <h2>Metas de Ahorro Pendientes</h2>
+    <ul id="listaMetas"></ul>
+
+    <h2>Transferencias / Pagos Pendientes</h2>
+    <ul id="listaTransferencias"></ul>
+
+    <h2>Saldo Total: $<span id="saldoTotal">0.00</span></h2>
+  </div>
+
+  <script>
+    let metas = JSON.parse(localStorage.getItem('metas')) || [];
+    let transferencias = JSON.parse(localStorage.getItem('transferencias')) || [];
+    let gastos = JSON.parse(localStorage.getItem('gastos')) || [];
+
+    const listaMetas = document.getElementById('listaMetas');
+    const listaTransferencias = document.getElementById('listaTransferencias');
+    const saldoTotalEl = document.getElementById('saldoTotal');
+
+    function actualizarSaldo() {
+      const saldoTotal = gastos.reduce((sum, g) => sum + g.monto, 0);
+      saldoTotalEl.textContent = saldoTotal.toFixed(2);
+    }
+
+    function actualizarListaMetas() {
+      listaMetas.innerHTML = '';
+      metas.forEach((meta, index) => {
+        const progreso = Math.min((meta.actual / meta.monto) * 100, 100);
+        if (progreso >= 100) return;
+
+        const li = document.createElement('li');
+        li.innerHTML = `
+          <strong>${meta.nombre}</strong> - $${meta.monto} / ${meta.periodo} meses
+          <br>Fecha límite: ${meta.fechaLimite}
+          <div class="progreso-bar">
+            <div class="progreso-fill" style="width: ${progreso}%;">${progreso.toFixed(1)}%</div>
+          </div>
+          <button class="aporte-btn" data-index="${index}">He realizado aporte</button>
+          <button class="eliminar-btn" data-index="${index}">Eliminar</button>
+        `;
+        listaMetas.appendChild(li);
+      });
+
+      document.querySelectorAll('.aporte-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          const index = e.target.getAttribute('data-index');
+          agregarAporte(index);
+        });
+      });
+
+      document.querySelectorAll('.eliminar-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          const index = e.target.getAttribute('data-index');
+          eliminarMeta(index);
+        });
+      });
+    }
+
+    function agregarAporte(index) {
+      const aporte = parseFloat(prompt("Ingresa el monto a aportar:"));
+      if (isNaN(aporte) || aporte <= 0) return alert("Monto inválido");
+
+      metas[index].actual += aporte;
+      localStorage.setItem('metas', JSON.stringify(metas));
+
+      if (metas[index].actual >= metas[index].monto) {
+        alert(`¡Felicidades! Has alcanzado tu meta: ${metas[index].nombre}`);
+      }
+
+      actualizarListaMetas();
+    }
+
+    function eliminarMeta(index) {
+      metas.splice(index, 1);
+      localStorage.setItem('metas', JSON.stringify(metas));
+      actualizarListaMetas();
+    }
+
+    function actualizarListaTransferencias() {
+      listaTransferencias.innerHTML = '';
+      transferencias.forEach((t, index) => {
+        const li = document.createElement('li');
+        li.innerHTML = `
+          ${t.fecha} - ${t.nombre}: $${t.monto.toFixed(2)}
+          <button class="hecho-btn" data-index="${index}">He realizado la transferencia</button>
+          <button class="eliminar-btn" data-index="${index}">Eliminar</button>
+        `;
+        listaTransferencias.appendChild(li);
+      });
+
+      document.querySelectorAll('.hecho-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          const index = e.target.getAttribute('data-index');
+          transferirComoGasto(index);
+        });
+      });
+
+      document.querySelectorAll('.eliminar-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          const index = e.target.getAttribute('data-index');
+          transferencias.splice(index, 1);
+          localStorage.setItem('transferencias', JSON.stringify(transferencias));
+          actualizarListaTransferencias();
+        });
+      });
+    }
+
+    function transferirComoGasto(index) {
+      const t = transferencias[index];
+      gastos.push({ categoria: t.nombre, monto: t.monto, fecha: t.fecha });
+      localStorage.setItem('gastos', JSON.stringify(gastos));
+
+      transferencias.splice(index, 1);
+      localStorage.setItem('transferencias', JSON.stringify(transferencias));
+
+      actualizarListaTransferencias();
+      actualizarSaldo();
+    }
+
+    actualizarListaMetas();
+    actualizarListaTransferencias();
+    actualizarSaldo();
+  </script>
+
+</body>
+</html>
