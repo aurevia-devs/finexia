@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FinexIA Dashboard</title>
+  <link rel="stylesheet" href="public/assets/styles/dashboard.css">
+  <style>
+    .analisisIA {
+      margin-top: 15px;
+      background-color: #f1f1f1;
+      padding: 15px;
+      border-radius: 8px;
+      min-height: 80px;
+      font-size: 14px;
+    }
+    .ia-btn {
+      margin-top: 10px;
+      padding: 10px 20px;
+      background-color: #2196F3;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .ia-btn:hover {
+      background-color: #1976D2;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="dashboard-container">
+
+    <aside class="sidebar">
+      <div class="logo">FinexIA</div>
+      <nav class="menu">
+        <a href="#" class="active">Dashboard</a>
+        <a href="registrar-gasto.html">Registrar gasto</a>
+        <a href="metas.html">Metas de Ahorro</a>
+        <a href="ingresos.html">Añadir Ingresos</a>
+        <a href="estadistica.html">Estadisticas</a>
+        <a href="alerta-saldo.html">Alerta de Saldo Bajo</a>
+        <a href="chatbot.html">Chatbot</a>
+        <a href="recordatorios.html">recordatorios</a>
+
+        <a href="#">Ajustes</a>
+
+
+      </nav>
+      <div class="sidebar-bottom">
+        <a href="#">Ayuda</a>
+        <a href="#">Cerrar sesión</a>
+        <button class="chatbot-btn">ChatBot</button>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <header class="topbar">
+        <input type="text" placeholder="Buscar...">
+        <div class="topbar-icons">
+          <span class="icon-bell">🔔</span>
+          <div class="user-profile">Hola</div>
+        </div>
+      </header>
+
+      <section class="stats-overview">
+        <div class="stat-card">
+          <h4>Balance general</h4>
+          <p>$5240.21</p>
+        </div>
+        <div class="stat-card">
+          <h4>Gastos totales</h4>
+          <p>$250.80</p>
+        </div>
+        <div class="stat-card">
+          <h4>Total ahorrado</h4>
+          <p>$550.25</p>
+        </div>
+      </section>
+
+      <section class="dashboard-main">
+        <div class="chart-card">
+          <h3>Capital Activo</h3>
+          <div class="chart-placeholder">
+<img src="img/imagen-capital.jpg" alt="Capital Activo" style="width:100%; height:100%; object-fit:cover; border-radius:8px;"></div>
+        </div>
+
+        <div class="transactions-card">
+          <h3>Transacciones recientes</h3>
+          <table>
+            <thead>
+              <tr>
+                <th>Nombre</th>
+                <th>Tipo</th>
+                <th>Cantidad</th>
+                <th>Fecha</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Iphone 13 Pro MAX</td>
+                <td>Mobile</td>
+                <td>$420.84</td>
+                <td>14 Apr 2022</td>
+              </tr>
+              <tr>
+                <td>Netflix Subscription</td>
+                <td>Entertainment</td>
+                <td>$100.00</td>
+                <td>05 Apr 2022</td>
+              </tr>
+              <tr>
+                <td>Figma Subscription</td>
+                <td>Software</td>
+                <td>$244.20</td>
+                <td>02 Apr 2022</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="wallets-card">
+          <h3>Billetera</h3>
+          <div class="wallet">
+            <p>VISA</p>
+            <p>5495 7381 3759 2321</p>
+          </div>
+          <div class="wallet">
+            <p>VISA</p>
+            <p>85952548****</p>
+          </div>
+          <h3>Transferencias agendadas</h3>
+          <ul>
+            <li>Saleh Ahmed - $435.00</li>
+            <li>Delowar Hossain - $132.00</li>
+            <li>Moinul Hasan Nayem - $826.00</li>
+            <li>Dr. Jubed Ahmed - $435.00</li>
+            <li>AR. Jakir Alp - $228.00</li>
+          </ul>
+
+          <h3>Análisis Financiero IA</h3>
+          <div id="analisisIA" class="analisisIA">
+            <img src="img/imagen-analisis.jpg" alt="Análisis Financiero"style="width:100%; height:200px; object-fit:cover; border-radius:8px; margin-bottom:10px;">
+          </div>
+          <button class="ia-btn">Generar Análisis</button>
+
+        </div>
+
+      </section>
+
+    </main>
+
+  </div>
+
+  <!-- javascript -->
+  <script>
+    const analisisIA = document.getElementById('analisisIA');
+const iaBtn = document.querySelector('.ia-btn');
+
+iaBtn.addEventListener('click', () => {
+  let gastos = JSON.parse(localStorage.getItem('gastos')) || [];
+
+  if (gastos.length === 0) {
+    analisisIA.innerHTML = "<p>No hay gastos registrados para analizar.</p>";
+    return;
+  }
+
+  const totalGastos = gastos.reduce((sum, g) => sum + g.monto, 0);
+
+  const categorias = {};
+  gastos.forEach(g => {
+    categorias[g.categoria] = (categorias[g.categoria] || 0) + g.monto;
+  });
+  const categoriaMayor = Object.keys(categorias).reduce((a, b) => categorias[a] > categorias[b] ? a : b);
+
+  let recomendacion = categorias[categoriaMayor]/totalGastos > 0.5 ?
+      `Considera reducir tus gastos en ${categoriaMayor}, representan más del 50% del total.` :
+      "Tus gastos están balanceados entre las categorías.";
+
+  analisisIA.innerHTML = `
+    <h4>Resumen Financiero IA</h4>
+    <p><strong>Total de gastos:</strong> $${totalGastos.toFixed(2)}</p>
+    <p><strong>Categoría con mayor gasto:</strong> ${categoriaMayor}</p>
+    <p><strong>Recomendación:</strong> ${recomendacion}</p>
+  `;
+});
+
+
+  </script>
+
+</body>
+</html>
