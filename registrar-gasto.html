@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Registrar Gasto</title>
+  <link rel="stylesheet" href="registrar-gasto.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Registrar Gasto</h1>
+    
+    <form id="gastoForm">
+      <label for="categoria">Categoría:</label>
+      <select id="categoria" required>
+        <option value="">--Selecciona categoría--</option>
+        <option value="Alimentación">Alimentación</option>
+        <option value="Transporte">Transporte</option>
+        <option value="Entretenimiento">Entretenimiento</option>
+        <option value="Otros">Otros</option>
+      </select>
+
+      <label for="monto">Monto:</label>
+      <input type="number" id="monto" placeholder="0.00" step="0.01" required>
+
+      <label for="fecha">Fecha:</label>
+      <input type="date" id="fecha" required>
+
+      <label for="fechaPago">Fecha de pago (opcional, futura para recordatorio):</label>
+      <input type="date" id="fechaPago">
+
+      <button type="submit">Guardar</button>
+    </form>
+
+    <h2>Gastos Registrados</h2>
+    <ul id="listaGastos"></ul>
+
+    <h2>Transferencias / Pagos Pendientes</h2>
+    <ul id="listaTransferencias"></ul>
+
+    <h2>Saldo Total: $<span id="saldoTotal">0.00</span></h2>
+  </div>
+
+  <script src="registrar-gasto.js"></script>
+</body>
+</html>

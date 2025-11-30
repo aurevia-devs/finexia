@@ -1,0 +1,119 @@
+body { 
+  font-family: "Segoe UI", Arial, sans-serif;
+  background: linear-gradient(135deg, #6dd5ed, #2193b0);
+  margin: 0;
+  padding: 25px;
+}
+
+.container {
+  max-width: 520px;
+  margin: auto;
+  background: rgba(255, 255, 255, 0.92);
+  padding: 30px;
+  border-radius: 18px;
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.18);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  animation: fadeIn .5s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(15px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+h1, h2 {
+  text-align: center;
+  color: #1d3557;
+  font-weight: 800;
+}
+
+h1::before {
+  content: "💸 ";
+}
+
+h2::before {
+  content: "📌 ";
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+}
+
+label {
+  margin-top: 12px;
+  font-weight: 600;
+  color: #264653;
+  font-size: 15px;
+}
+
+input, select {
+  margin-top: 6px;
+  padding: 12px;
+  font-size: 16px;
+  border-radius: 10px;
+  border: 2px solid #cbd5e1;
+  background: #f8fafc;
+  transition: border-color .2s, box-shadow .2s;
+}
+
+input:focus, select:focus {
+  border-color: #457b9d;
+  box-shadow: 0 0 8px rgba(69, 123, 157, .4);
+  outline: none;
+}
+
+button {
+  margin-top: 20px;
+  padding: 14px;
+  font-size: 17px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: bold;
+  background: linear-gradient(135deg, #38b000, #2d8f00);
+  color: white;
+  box-shadow: 0 4px 14px rgba(0,128,0,0.25);
+  transition: transform .18s, box-shadow .22s;
+}
+
+button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 18px rgba(0,128,0,0.32);
+}
+
+ul {
+  list-style-type: none;
+  padding: 0;
+  margin-top: 15px;
+}
+
+li {
+  background: #f1f5f9;
+  margin-top: 8px;
+  padding: 12px;
+  border-radius: 10px;
+  border-left: 6px solid #457b9d;
+  font-size: 15px;
+  color: #1e293b;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+li::before {
+  content: "💰";
+  font-size: 18px;
+}
+
+#saldoTotal {
+  font-weight: bold;
+  color: #0a4a0a;
+}
+
+#saldoTotal.changed {
+  animation: pulse 0.6s ease-out;
+}
+
